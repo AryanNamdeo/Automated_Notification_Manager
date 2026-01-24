@@ -1,0 +1,18 @@
+{
+    "focus_mode": true,
+    "study_apps": [
+        "vs code",
+        "python",
+        "notepad"
+    ],
+    "blocked_apps": [
+        "chrome",
+        "edge",
+        "firefox",
+        "spotify",
+        "discord",
+        "telegram",
+        "whatsapp"
+    ],
+    "alert_time_minutes": 5
+}
