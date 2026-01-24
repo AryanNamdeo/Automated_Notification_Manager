@@ -13,14 +13,15 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def on_open_gui(icon, item):
-    subprocess.Popen([sys.executable, "--gui"])
+    gui_path = resource_path("gui.py")
+    subprocess.Popen([sys.executable, gui_path])
 
 def on_exit(icon, item):
     icon.stop()
     sys.exit()
 
 def run_tray():
-    image = Image.open(resource_path("icon.ico"))
+    image = Image.new("RGB", (64, 64), "blue")
 
     menu = (
         item("Open Control Panel", on_open_gui),
