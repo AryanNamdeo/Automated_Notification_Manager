@@ -5,23 +5,16 @@ import subprocess
 import sys
 import os
 
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
-
 def on_open_gui(icon, item):
-    gui_path = resource_path("gui.py")
-    subprocess.Popen([sys.executable, gui_path])
+    # SAME exe ko --gui flag ke sath run karo
+    subprocess.Popen([sys.executable, "--gui"])
 
 def on_exit(icon, item):
     icon.stop()
-    sys.exit()
+    os._exit(0)
 
 def run_tray():
-    image = Image.new("RGB", (64, 64), "blue")
+    image = Image.new("RGB", (64, 64), "green")
 
     menu = (
         item("Open Control Panel", on_open_gui),

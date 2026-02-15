@@ -1,5 +1,10 @@
 {
-    "focus_mode": true,
+    "focus_mode": false,
+    "auto_focus": true,
+    "focus_schedule": {
+        "start": "10:00",
+        "end": "13:00"
+    },
     "study_apps": [
         "vs code",
         "python",
@@ -14,5 +19,5 @@
         "telegram",
         "whatsapp"
     ],
-    "alert_time_minutes": 5
+    "alert_time_minutes": 1
 }

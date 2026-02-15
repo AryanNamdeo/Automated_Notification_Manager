@@ -7,6 +7,9 @@ from tracker import get_running_apps
 from notifier import notify
 from tray import run_tray
 import sys
+from scheduler import check_schedule
+# =========================
+# GUI Mode
 
 if "--gui" in sys.argv:
     from gui import start_gui
@@ -45,9 +48,10 @@ if __name__ == "__main__":
     while True:
         config = load_config()
 
-        if config.get("focus_mode", False):
-            running_apps = get_running_apps()
+        config["focus_mode"] = check_schedule(config)
 
+        if config["focus_mode"]:
+            running_apps = get_running_apps()
             for app in config.get("blocked_apps", []):
                 for running in running_apps:
                     if app.lower() in running.lower():

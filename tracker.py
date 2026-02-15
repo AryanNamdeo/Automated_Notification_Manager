@@ -1,10 +1,11 @@
 import psutil
 
 def get_running_apps():
-    apps = set()
+    apps = []
     for proc in psutil.process_iter(['name']):
         try:
-            apps.add(proc.info['name'].lower())
-        except:
+            if proc.info['name']:
+                apps.append(proc.info['name'].lower())
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
             pass
     return apps
