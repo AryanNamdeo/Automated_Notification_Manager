@@ -1,11 +1,12 @@
 import psutil
 
-def get_running_apps():
-    apps = []
+def kill_blocked_apps(blocked_apps):
     for proc in psutil.process_iter(['name']):
         try:
-            if proc.info['name']:
-                apps.append(proc.info['name'].lower())
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            process_name = proc.info['name']
+            if process_name:
+                for app in blocked_apps:
+                    if app.lower() in process_name.lower():
+                        proc.kill()
+        except:
             pass
-    return apps

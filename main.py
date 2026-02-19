@@ -3,24 +3,24 @@ import os
 import time
 import json
 import threading
-from tracker import get_running_apps
-from notifier import notify
 from tray import run_tray
-import sys
 from scheduler import check_schedule
+from tracker import kill_blocked_apps   # ✅ NEW IMPORT
+
 # =========================
 # GUI Mode
-
+# =========================
 if "--gui" in sys.argv:
     from gui import start_gui
     start_gui()
     sys.exit()
+
 # =========================
 # PyInstaller resource path
 # =========================
 def resource_path(relative_path):
     try:
-        base_path = sys._MEIPASS   # PyInstaller temp folder
+        base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
@@ -46,19 +46,19 @@ if __name__ == "__main__":
 
     # ▶ Infinite monitoring loop
     while True:
-        config = load_config()
+        try:
+            config = load_config()
 
-        config["focus_mode"] = check_schedule(config)
+            # Apply schedule if enabled
+            config["focus_mode"] = check_schedule(config)
 
-        if config["focus_mode"]:
-            running_apps = get_running_apps()
-            for app in config.get("blocked_apps", []):
-                for running in running_apps:
-                    if app.lower() in running.lower():
-                        notify(
-                            "⚠ Focus Alert",
-                            f"{app} is running. Stay focused!"
-                        )
-                        time.sleep(10)
+            # If focus mode is ON → kill blocked apps
+            if config.get("focus_mode", False):
+                kill_blocked_apps(config.get("blocked_apps", []))
 
-        time.sleep(config.get("alert_time_minutes", 1) * 60)
+            # Check every 5 seconds (fast & stable)
+            time.sleep(5)
+
+        except Exception as e:
+            print("Error:", e)
+            time.sleep(5)
